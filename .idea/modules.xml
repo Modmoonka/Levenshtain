@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/aptagraph.iml" filepath="$PROJECT_DIR$/.idea/modules/aptagraph.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/aptagraph_main.iml" filepath="$PROJECT_DIR$/.idea/modules/aptagraph_main.iml" group="aptagraph" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/aptagraph_test.iml" filepath="$PROJECT_DIR$/.idea/modules/aptagraph_test.iml" group="aptagraph" />
+    </modules>
+  </component>
+</project>
