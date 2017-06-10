@@ -29,16 +29,16 @@ public class FileDistance {
 
     public Stream<Cluster> clusters() {
         if (Objects.isNull(clusters)) {
-            clusters = new HashSet<>();
+            clusters = new LinkedHashSet<>();
             final Set<Sequence> sequences = file.sequences().collect(Collectors.toSet());
-            final Set<Sequence> remaining = new HashSet<>(sequences);
-            int clusterCount = 0;
+            final Set<Sequence> remaining = new LinkedHashSet<>(sequences);
 
             for (Sequence sequence : sequences) {
                 if (clusters.size() >= maxClusters) break;
                 if (remaining.isEmpty()) break;
+                if (!remaining.contains(sequence)) continue;
 
-                final Cluster cluster = new Cluster(++clusterCount, radius, sequence);
+                final Cluster cluster = new Cluster(clusters.size() + 1, radius, sequence);
                 final Set<Sequence> clustered = cluster.sequences(remaining)
                         .map(Map.Entry::getKey)
                         .collect(Collectors.toSet());
@@ -56,7 +56,9 @@ public class FileDistance {
         try (final BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
             writer.write("Sequence\tCluster\tEdit Distance");
             writer.newLine();
-            clusters.forEach(
+            clusters.stream()
+                    .sorted(Comparator.comparingInt(Cluster::id))
+                    .forEach(
                     cluster -> {
                         cluster.sequences(null).forEach(
                                 sequenceDistanceEntry -> {
