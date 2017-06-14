@@ -3,62 +3,32 @@ package com.github.modmoonka.aptagraph;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Stream;
-
 
 public class LevenshteinNeighbors {
-
     public static void main(String[] args) {
         try (final BufferedReader buffer = new BufferedReader(new InputStreamReader(System.in))) {
-            final Path workinpath = readPath(buffer);
-            final int radius = readDistance(buffer);
-            final int maxCluster = readClastering(buffer);
-            final FileDistance clustersFile = new FileDistance(radius, maxCluster, new Fasta(workinpath));
+            final Path poolP = readPath("Path to pool-P file: ", buffer);
+            final Path poolM = readPath("Path to pool-M file: ", buffer);
+            final int radius = readNumber("Interval of distance: ", buffer);
+            final int maxCluster = readNumber("Number of clusters: ", buffer);
+            final int kMerLength = readNumber("k-mer length: ", buffer);
+            final FileDistance clustersFile = new FileDistance(radius, maxCluster, new Fasta(poolP), new Fasta(poolM), kMerLength);
             clustersFile.save();
         } catch (IOException e) {
             System.err.println("Something goes wrong, cause: " + e.getMessage());
         }
     }
 
-    private static Stream<Path> paths(final Path path) throws IOException {
-        final Set<Path> paths = new HashSet<>();
-        if (path.toFile().isDirectory()) {
-            Files.list(path)
-                    .filter(item -> item.toString().endsWith(".fasta"))
-                    .forEach(paths::add);
-        } else if (path.toString().endsWith(".fasta")) {
-            paths.add(path);
-        }
-        return paths.stream();
-    }
-
-
-    private static Path readPath(final BufferedReader buffer) throws IOException {
-        System.out.print("Path to fasta directory or file: ");
+    private static Path readPath(final String description, final BufferedReader buffer) throws IOException {
+        System.out.print(description);
         return Paths.get(buffer.readLine().trim());
     }
 
-
-    private static int readDistance(final BufferedReader buffer) throws IOException {
-        System.out.print("Interval of distance: ");
-        return Integer.parseInt(buffer.readLine().trim());
-
-    }
-
-    public static int readClastering(final BufferedReader buffer) throws IOException {
-        System.out.print("Number of clusters: ");
+    private static int readNumber(final String description, final BufferedReader buffer) throws IOException {
+        System.out.print(description);
         final String input = buffer.readLine().trim();
         return Integer.parseInt(input.isEmpty() ? "0" : input);
     }
-
-
-
-
-
 }
-

@@ -3,7 +3,7 @@ package com.github.modmoonka.aptagraph;
 public class LevenshteinDistance implements EditDistance {
     @Override
     public int of(final CharSequence left, final CharSequence right) {
-        int leftLength = left.length();
+        int leftLength = left.length(); 
         int rightLength = right.length();
         int[] previousColumn;
         int[] currentColumn = new int[rightLength + 1];
@@ -28,3 +28,10 @@ public class LevenshteinDistance implements EditDistance {
         return currentColumn[rightLength];
     }
 }
+
+/**
+ * poolP - большой файл
+ * poolM - файл с меньшим количеством последовательностей
+ * poolM разбиваем на к-меры, которые ищем в poolP
+ * sequence | k-mer | k-mer
+ */

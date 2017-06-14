@@ -1,7 +1,8 @@
 package com.github.modmoonka.aptagraph;
 
 import java.util.Objects;
-
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class Sequence {
     private final String name;
@@ -22,6 +23,13 @@ public class Sequence {
             throw new IllegalArgumentException("Sequence aptamer is not valid: " + aptamer);
         this.name = name;
         this.aptamer = aptamer;
+    }
+
+    public Stream<CharSequence> sliding(final int size) {
+        return aptamer.length() < size
+                ? Stream.empty()
+                : IntStream.rangeClosed(0, aptamer.length() - size)
+                           .mapToObj(index -> aptamer.subSequence(index, index + size));
     }
 
     /**
